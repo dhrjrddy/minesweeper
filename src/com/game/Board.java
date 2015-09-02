@@ -2,14 +2,14 @@ package com.game;
 
 public class Board {
     private int[][] mines;
-    private char[][] boardgame;
-    private int Line, Column;
+    private char[][] boardGame;
+    private int line, column;
     private int count=100;
     private Display output;
     
     public Board (){
         mines = new int[10][10];
-        boardgame = new char[10][10];
+        boardGame = new char[10][10];
         startMines();
         randomMines();
         fillNeighbours();
@@ -33,11 +33,11 @@ public class Board {
     public int openNeighbors(){
         for(int i=-1 ; i<2 ; i++)
             for(int j=-1 ; j<2 ; j++)
-                if((Line+i)!= -1 && (Line+i)!= 10 && (Column+j) != -1 && (Column+j) != 10) 
-                	if (mines[Line+i][Column+j] != -1){
-                		if (boardgame[Line+i][Column+j]=='_')
+                if((line+i)!= -1 && (line+i)!= 10 && (column+j) != -1 && (column+j) != 10) 
+                	if (mines[line+i][column+j] != -1){
+                		if (boardGame[line+i][column+j]=='_')
                 			count--;
-                    	boardgame[Line+i][Column+j]=Character.forDigit(mines[Line+i][Column+j], 10);                    	
+                    	boardGame[line+i][column+j]=Character.forDigit(mines[line+i][column+j], 10);                    	
                 	}
         if(count==10){
             output.won();
@@ -46,9 +46,9 @@ public class Board {
     }
     
     public boolean inputPosition(int line , int column){
-    		this.Line=line;
-    		this.Column=column;         
-            if(mines[Line][Column]== -1){
+    		this.line=line;
+    		this.column=column;         
+            if(mines[line][column]== -1){
             	output.lost();
                 return true;
             }
@@ -59,7 +59,7 @@ public class Board {
     
    
     public void show(){
-        output.dataDisplay(boardgame,mines);
+        output.dataDisplay(boardGame,mines);
     }
     
     public void fillNeighbours(){
@@ -70,8 +70,7 @@ public class Board {
                         for(int j=-1 ; j<=1 ; j++)
                             if(mines[line][column] != -1 && ((line+i)!= -1 && (line+i)!= 10 && (column+j) != -1 && (column+j) != 10))
                                 if(mines[line+i][column+j] == -1)
-                                    mines[line][column]++;
-                
+                                    mines[line][column]++;               
             }
             
     }
@@ -88,7 +87,7 @@ public class Board {
     public void startBoard(){
         for(int i=0 ; i<mines.length ; i++)
             for(int j=0 ; j<mines.length ; j++)
-                boardgame[i][j]= '_';
+                boardGame[i][j]= '_';
     }
     
     public void startMines(){
@@ -99,19 +98,19 @@ public class Board {
     
     public void randomMines(){
         boolean avilable;
-        int Line, Column;
+        int line, column;
         for(int i=0 ; i<10 ; i++){
             
             do{
-                Line = (int)(Math.random() * 10) ;
-                Column = (int)(Math.random() * 10);
-                if(mines[Line][Column] == -1)
+                line = (int)(Math.random() * 10) ;
+                column = (int)(Math.random() * 10);
+                if(mines[line][column] == -1)
                 	avilable=true;
                 else
                 	avilable = false;
             }while(avilable);
             
-            mines[Line][Column] = -1;
+            mines[line][column] = -1;
         }
     }
 }
