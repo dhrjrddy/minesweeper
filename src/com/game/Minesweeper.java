@@ -1,5 +1,6 @@
 package com.game;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Minesweeper {
@@ -33,6 +34,17 @@ public class Minesweeper {
 		}
 	}
 
+	public boolean isValidInput(int line, int column) {
+		if (line < 0 || line > 9 || column < 0 || column > 9) {
+			System.out.println("Choose a number between 1 and 10");
+			return false;
+		} else if ((boardGame[line][column] != '_')) {
+			System.out.println("Field already shown");
+			return false;
+		} else
+			return true;
+	}
+
 	public void selectCoordinates() {
 		boolean isMine = false;
 		int line;
@@ -40,15 +52,22 @@ public class Minesweeper {
 		Scanner sc = new Scanner(System.in);
 		do {
 			showBoard();
-			turn++;
-			System.out.print("row: ");
-			line = sc.nextInt();
-			System.out.print("column: ");
-			column = sc.nextInt();
-			isMine = board.hasMine(line - 1, column - 1);
-			if (!isMine) {
-				boardGame = board.openNeighbors(boardGame);
-				blockLeft = board.noOfBlocks();
+			try {
+				System.out.print("row: ");
+				line = sc.nextInt() - 1;
+				System.out.print("column: ");
+				column = sc.nextInt() - 1;
+				if (isValidInput(line, column)) {
+					turn++;
+					isMine = board.hasMine(line, column);
+					if (!isMine) {
+						boardGame = board.openNeighbors(boardGame);
+						blockLeft = board.noOfBlocks();
+					}
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Choose a number between 1 and 10");
+				sc.next();
 			}
 		} while (!isMine && blockLeft != 10);
 		sc.close();
@@ -57,12 +76,12 @@ public class Minesweeper {
 
 	public void showResult() {
 		if (blockLeft == 10) {
-			System.out.println("Congratulations");
 			boardGame = board.showMines();
+			System.out.println("Congratulations");
 			showBoard();
 		} else {
-			System.out.println("Mine! You lost!");
 			boardGame = board.showMines();
+			System.out.println("Mine! You lost!");
 			showBoard();
 		}
 	}
