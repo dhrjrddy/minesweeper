@@ -5,10 +5,10 @@ public class Board {
 	private char[][] game; // 2-dimensional array for game
 	private int line;
 	private int column;
-	private int length; // Length of the Board
-	private int width; // Width of the Board
+	private int length; // Length of the board
+	private int width; // Width of the board
 	private int minecount; // Number of mines
-	private int count; // Number of Blocksleft
+	private int count; // Number of blocksleft
 	private final int MIN = 0;
 	private final char MINE = '*';
 	private final char NOT_SELECTED = '_';
