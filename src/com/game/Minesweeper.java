@@ -8,34 +8,44 @@ public class Minesweeper {
 	private Board board;
 	private char[][] boardGame;
 	private int turn = 0;
-	private int blockLeft = 100;
+	private int blockLeft;
+	private int length;
+	private int width;
+	private int mines;
+	private final int MIN = 0;   
 
-	public Minesweeper() {
-		board = new Board();
-		boardGame = new char[10][10];
+	public Minesweeper(int length, int width, int mines) {
+		this.length = length;
+		this.width = width;
+		this.mines = mines;
+		board = new Board(length, width, mines);
+		boardGame = new char[length][width];
 		startBoard();
 	}
 
-	public void showBoard() {
+	private void showBoard() {
 		System.out.println("Turn " + turn);
-		for (int line = 0; line < 10; line++) {
-			for (int column = 0; column < 10; column++) {
+		for (int line = 0; line < length; line++) {
+			for (int column = 0; column < width; column++) {
 				System.out.print("   " + boardGame[line][column]);
 			}
 			System.out.println();
 		}
 	}
 
-	public void startBoard() {
-		for (int line = 0; line < 10; line++) {
-			for (int column = 0; column < 10; column++) {
+	// Initializing the board
+	private void startBoard() {
+		for (int line = 0; line < length; line++) {
+			for (int column = 0; column < width; column++) {
 				boardGame[line][column] = '_';
 			}
 		}
 	}
 
-	public boolean isValidInput(int line, int column) {
-		if (line < 0 || line > 9 || column < 0 || column > 9) {
+	// Check the user input to make sure no non-existing cell is checked.
+	private boolean isValidInput(int line, int column) {
+		if (line < MIN || line > (length - 1) || column < MIN
+				|| column > (width - 1)) {
 			System.out.println("Choose a number between 1 and 10");
 			return false;
 		} else if ((boardGame[line][column] != '_')) {
@@ -45,37 +55,37 @@ public class Minesweeper {
 			return true;
 	}
 
-	public void selectCoordinates() {
-		boolean isMine = false;
-		int line;
-		int column;
+	private void startGame() {
 		Scanner sc = new Scanner(System.in);
+		boolean isMine = false;
 		do {
 			showBoard();
+			int line = 0;
+			int column = 0;
 			try {
 				System.out.print("row: ");
-				line = sc.nextInt() - 1;
+				line = sc.nextInt() - 1; // As array starts from 0
 				System.out.print("column: ");
 				column = sc.nextInt() - 1;
-				if (isValidInput(line, column)) {
-					turn++;
-					isMine = board.hasMine(line, column);
-					if (!isMine) {
-						boardGame = board.openNeighbors(boardGame);
-						blockLeft = board.noOfBlocks();
-					}
-				}
 			} catch (InputMismatchException e) {
 				System.out.println("Choose a number between 1 and 10");
-				sc.next();
+				continue;
 			}
-		} while (!isMine && blockLeft != 10);
-		sc.close();
+			if (isValidInput(line, column)) {
+				turn++;
+				isMine = board.hasMine(line, column);
+				if (!isMine) {
+					boardGame = board.openNeighbors();
+					blockLeft = board.noOfBlocks();
+				}
+			}
+		} while (!isMine && blockLeft != mines);
 		showResult();
+		sc.close();
 	}
 
-	public void showResult() {
-		if (blockLeft == 10) {
+	private void showResult() {
+		if (blockLeft == mines) {
 			boardGame = board.showMines();
 			System.out.println("Congratulations");
 			showBoard();
@@ -87,7 +97,23 @@ public class Minesweeper {
 	}
 
 	public static void main(String[] args) {
-		Minesweeper game = new Minesweeper();
-		game.selectCoordinates();
+		Scanner sc = new Scanner(System.in);
+		int length = 0;
+		int width = 0;
+		int mines = 0;
+		try {
+			System.out.print("Board Length: ");
+			length = sc.nextInt();
+			System.out.print("Board Width: ");
+			width = sc.nextInt();
+			System.out.print("No of Mines: ");
+			mines = sc.nextInt();
+			Minesweeper game = new Minesweeper(length, width, mines);
+			game.startGame();
+		} catch (InputMismatchException e) {
+			System.out.println("Choose a valid number");
+		}
+
+		sc.close();
 	}
 }
