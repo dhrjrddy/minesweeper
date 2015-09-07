@@ -2,8 +2,6 @@
 
 Java Minesweeper
 
-Java Minesweeprt is verified on Java version 7 and JDK1.7.
-
 
 --- FEATURES ---
 
@@ -13,6 +11,9 @@ Configurable number of mines.
 
 
 --- USAGE ---
+
+
+Java Minesweeper is verified on Java version 7 and JDK1.7.
 
 Run the Minesweeper.java file to start the game.
 
