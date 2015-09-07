@@ -5,10 +5,10 @@ public class Board {
 	private char[][] game; // 2-dimensional array for game
 	private int line;
 	private int column;
-	private int length; // length of the Board
-	private int width; // width of the Board
-	private int minecount; // number of mines
-	private int count; // number of Blocksleft
+	private int length; // Length of the Board
+	private int width; // Width of the Board
+	private int minecount; // Number of mines
+	private int count; // Number of Blocksleft
 	private final int MIN = 0;
 	private final char MINE = '*';
 	private final char NOT_SELECTED = '_';
@@ -24,16 +24,20 @@ public class Board {
 		randomMines();
 	}
 
-	// for a cell check mines in all directions
-	// @return the game board with the neighboring fields containing a mine
-	// count.
+	/*
+	 * For a cell check mines in all directions and return the game board with
+	 * the neighboring fields containing a mine count.
+	 */
 	public char[][] openNeighbors() {
 		for (int rowNeighbour = -1; rowNeighbour < 2; rowNeighbour++) {
 			for (int columnNeighbour = -1; columnNeighbour < 2; columnNeighbour++) {
 				int line = this.line - rowNeighbour;
 				int column = this.column - columnNeighbour;
-				// check the boundaries to make sure no non-existing cells are
-				// checked (eg. column 0-1 = -1).
+
+				/*
+				 * Check the boundaries to make sure no non-existing cells are
+				 * checked (eg. column 0-1 = -1).
+				 */
 				if (line >= MIN && column >= MIN && line <= (length - 1)
 						&& column <= (width - 1) && mines[line][column] != MINE
 						&& game[line][column] == NOT_SELECTED) {
@@ -66,7 +70,8 @@ public class Board {
 							&& mines[line + 1][column - 1] == MINE) { // SouthEast
 						blockNumber++;
 					}
-					// Changing an Int to a char
+
+					/* Changing an int to a char. */
 					game[line][column] = Character.forDigit(blockNumber, 10);
 					count--;
 				}
@@ -75,7 +80,22 @@ public class Board {
 		return game;
 	}
 
-	// returns true if there's a mine at x,y or false if there isn't
+	/* Initialize every board space to a _ character. */
+	private void startMines() {
+		for (int line = 0; line < mines.length; line++) {
+			for (int column = 0; column < mines.length; column++) {
+				mines[line][column] = NOT_SELECTED;
+				game[line][column] = NOT_SELECTED;
+			}
+		}
+	}
+
+	/* Returns the count of number of blocks left to select. */
+	public int noOfBlocks() {
+		return count;
+	}
+
+	/* Returns true if there's a mine at x,y or false if there isn't. */
 	public boolean hasMine(int line, int column) {
 		this.line = line;
 		this.column = column;
@@ -87,12 +107,7 @@ public class Board {
 
 	}
 
-	// returns the count of number of blocks left to select.
-	public int noOfBlocks() {
-		return count;
-	}
-
-	// returns the board with mines after the game finishes
+	/* Returns the board with mines after the game finishes. */
 	public char[][] showMines() {
 		for (int line = 0; line < length; line++) {
 			for (int column = 0; column < width; column++) {
@@ -104,25 +119,17 @@ public class Board {
 		return game;
 	}
 
-	// Set every board space to a _ character.
-	private void startMines() {
-		for (int line = 0; line < mines.length; line++) {
-			for (int column = 0; column < mines.length; column++) {
-				mines[line][column] = NOT_SELECTED;
-				game[line][column] = NOT_SELECTED;
-			}
-		}
-	}
-
 	private void randomMines() {
 		boolean avilable;
 		int line, column;
 		for (int mineObject = 0; mineObject < minecount; mineObject++) {
 			do {
-				// generates random numbers between 0 and mWidth - 1
+
+				/* Generates random numbers between 0 and mWidth - 1. */
 				line = (int) (Math.random() * minecount);
 				column = (int) (Math.random() * minecount);
-				// make sure we don't place a mine on top of another
+
+				/* Make sure we don't place a mine on top of another. */
 				if (mines[line][column] == MINE) {
 					avilable = true;
 				} else {

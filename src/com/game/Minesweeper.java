@@ -12,7 +12,7 @@ public class Minesweeper {
 	private int length;
 	private int width;
 	private int mines;
-	private final int MIN = 0;   
+	private final int MIN = 0;
 
 	public Minesweeper(int length, int width, int mines) {
 		this.length = length;
@@ -33,7 +33,7 @@ public class Minesweeper {
 		}
 	}
 
-	// Initializing the board
+	/* Initializing the board. */
 	private void startBoard() {
 		for (int line = 0; line < length; line++) {
 			for (int column = 0; column < width; column++) {
@@ -42,7 +42,7 @@ public class Minesweeper {
 		}
 	}
 
-	// Check the user input to make sure no non-existing cell is checked.
+	/* Check the user input to make sure no non-existing cell is checked. */
 	private boolean isValidInput(int line, int column) {
 		if (line < MIN || line > (length - 1) || column < MIN
 				|| column > (width - 1)) {
