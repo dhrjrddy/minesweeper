@@ -25,8 +25,9 @@ public class Board {
 	}
 
 	/*
-	 * For a cell check mines in all directions and return the game board with
-	 * the neighboring fields containing a mine count.
+	 * For a cell check mines in all directions and update the cell 
+	 * and return the game board with the selected input neighboring fields
+	 * updated with the mine count.
 	 */
 	public char[][] openNeighbors() {
 		for (int rowNeighbour = -1; rowNeighbour < 2; rowNeighbour++) {
