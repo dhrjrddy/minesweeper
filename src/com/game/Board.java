@@ -1,106 +1,121 @@
 package com.game;
 
 public class Board {
-	private char[][] mines; // 2-dimensional array for mines
-	private char[][] game; // 2-dimensional array for game
-	private int line;
+	public int[][] gameBoard; // 2-dimensional array for game
+	private int row;
 	private int column;
 	private int length; // Length of the board
 	private int width; // Width of the board
-	private int minecount; // Number of mines
-	private int count; // Number of blocksleft
-	private final int MIN = 0;
-	private final char MINE = '*';
-	private final char NOT_SELECTED = '_';
+	private int mineCount; // Number of mines
+	public int blocksLeft; // Number of blocks left
+	private final int MINE = -1;
+	private final int NOT_SELECTED = 9;
 
-	public Board(int length, int width, int minecount) {
+	public Board(int length, int width, int mineCount) {
 		this.length = length;
 		this.width = width;
-		this.count = length * width;
-		this.minecount = minecount;
-		mines = new char[length][width];
-		game = new char[length][width];
-		startMines();
-		randomMines();
+		this.blocksLeft = length * width;
+		this.mineCount = mineCount;
+		gameBoard = new int[length][width];
+		initGameBoard();
+		generateMines();
 	}
 
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public void setColumn(int column) {
+		this.column = column;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public int getWidth() {
+		return length;
+	}
+
+	public int getMineCount() {
+		return mineCount;
+	}
+
+	public int getMine() {
+		return MINE;
+	}
+
+	public int getNotSelected() {
+		return NOT_SELECTED;
+	}
+	
 	/*
-	 * For a cell check mines in all directions and update the cell 
-	 * and return the game board with the selected input neighboring fields
-	 * updated with the mine count.
+	 * For a cell, check mines in all directions and update the cell and return
+	 * the game board with the selected input neighboring fields updated with
+	 * the mine count.
 	 */
-	public char[][] openNeighbors() {
+	public void openNeighbors() {
 		for (int rowNeighbour = -1; rowNeighbour < 2; rowNeighbour++) {
 			for (int columnNeighbour = -1; columnNeighbour < 2; columnNeighbour++) {
-				int line = this.line - rowNeighbour;
+				int row = this.row - rowNeighbour;
 				int column = this.column - columnNeighbour;
 
 				/*
 				 * Check the boundaries to make sure no non-existing cells are
 				 * checked (eg. column 0-1 = -1).
 				 */
-				if (line >= MIN && column >= MIN && line <= (length - 1)
-						&& column <= (width - 1) && mines[line][column] != MINE
-						&& game[line][column] == NOT_SELECTED) {
-					int blockNumber = 0;
-					if (column >= 1 && mines[line][column - 1] == MINE) { // East
-						blockNumber++;
+				if (row >= 0 && column >= 0 && row <= (length - 1)
+						&& column <= (width - 1)
+						&& gameBoard[row][column] != MINE
+						&& gameBoard[row][column] == NOT_SELECTED) {
+					int cellMineCount = 0;
+					if (column >= 1 && gameBoard[row][column - 1] == MINE) { // East
+						cellMineCount++;
 					}
-					if (column <= 8 && mines[line][column + 1] == MINE) { // West
-						blockNumber++;
+					if (column <= 8 && gameBoard[row][column + 1] == MINE) { // West
+						cellMineCount++;
 					}
-					if (line >= 1 && mines[line - 1][column] == MINE) { // North
-						blockNumber++;
+					if (row >= 1 && gameBoard[row - 1][column] == MINE) { // North
+						cellMineCount++;
 					}
-					if (line <= 8 && mines[line + 1][column] == MINE) { // South
-						blockNumber++;
+					if (row <= 8 && gameBoard[row + 1][column] == MINE) { // South
+						cellMineCount++;
 					}
-					if (line >= 1 && column >= 1
-							&& mines[line - 1][column - 1] == MINE) { // NorthWest
-						blockNumber++;
+					if (row >= 1 && column >= 1
+							&& gameBoard[row - 1][column - 1] == MINE) { // NorthWest
+						cellMineCount++;
 					}
-					if (line <= 8 && column <= 8
-							&& mines[line + 1][column + 1] == MINE) { // SouthEast
-						blockNumber++;
+					if (row <= 8 && column <= 8
+							&& gameBoard[row + 1][column + 1] == MINE) { // SouthEast
+						cellMineCount++;
 					}
-					if (line >= 1 && column <= 8
-							&& mines[line - 1][column + 1] == MINE) { // NorthEast
-						blockNumber++;
+					if (row >= 1 && column <= 8
+							&& gameBoard[row - 1][column + 1] == MINE) { // NorthEast
+						cellMineCount++;
 					}
-					if (line <= 8 && column >= 1
-							&& mines[line + 1][column - 1] == MINE) { // SouthEast
-						blockNumber++;
+					if (row <= 8 && column >= 1
+							&& gameBoard[row + 1][column - 1] == MINE) { // SouthEast
+						cellMineCount++;
 					}
-
-					/* Changing an int to a char. */
-					game[line][column] = Character.forDigit(blockNumber, 10);
-					count--;
+					gameBoard[row][column] = cellMineCount;
+					blocksLeft--;
 				}
 			}
 		}
-		return game;
 	}
 
 	/* Initialize every board space to a _ character. */
-	private void startMines() {
-		for (int line = 0; line < mines.length; line++) {
-			for (int column = 0; column < mines.length; column++) {
-				mines[line][column] = NOT_SELECTED;
-				game[line][column] = NOT_SELECTED;
+	private void initGameBoard() {
+		for (int line = 0; line < gameBoard.length; line++) {
+			for (int column = 0; column < gameBoard.length; column++) {
+				gameBoard[line][column] = NOT_SELECTED;
 			}
 		}
 	}
 
-	/* Returns the count of number of blocks left to select. */
-	public int noOfBlocks() {
-		return count;
-	}
-
 	/* Returns true if there's a mine at x,y or false if there isn't. */
-	public boolean hasMine(int line, int column) {
-		this.line = line;
-		this.column = column;
-		if (mines[line][column] == MINE) {
+	public boolean hasMine() {
+		if (gameBoard[row][column] == MINE) {
 			return true;
 		} else {
 			return false;
@@ -108,37 +123,33 @@ public class Board {
 
 	}
 
-	/* Returns the board with mines after the game finishes. */
-	public char[][] showMines() {
-		for (int line = 0; line < length; line++) {
-			for (int column = 0; column < width; column++) {
-				if (mines[line][column] == MINE) {
-					game[line][column] = MINE;
-				}
-			}
-		}
-		return game;
+	public int getNoOfBlocksLeft() {
+		return blocksLeft;
 	}
 
-	private void randomMines() {
+	public int[][] getGameBoard() {
+		return gameBoard;
+	}
+
+	private void generateMines() {
 		boolean avilable;
 		int line, column;
-		for (int mineObject = 0; mineObject < minecount; mineObject++) {
+		for (int mineObject = 0; mineObject < mineCount; mineObject++) {
 			do {
 
 				/* Generates random numbers between 0 and mWidth - 1. */
-				line = (int) (Math.random() * minecount);
-				column = (int) (Math.random() * minecount);
+				line = (int) (Math.random() * length);
+				column = (int) (Math.random() * width);
 
 				/* Make sure we don't place a mine on top of another. */
-				if (mines[line][column] == MINE) {
+				if (gameBoard[line][column] == MINE) {
 					avilable = true;
 				} else {
 					avilable = false;
 				}
 			} while (avilable);
 
-			mines[line][column] = MINE;
+			gameBoard[line][column] = MINE;
 		}
 	}
 }
