@@ -80,9 +80,11 @@ public class Minesweeper {
 		System.out.println("Turn " + turn);
 		for (int line = 0; line < board.getLength(); line++) {
 			for (int column = 0; column < board.getWidth(); column++) {
-				if (board.getGameBoard()[line][column] == 9) {
+				if (board.getGameBoard()[line][column] == board
+						.getNotSelected()) {
 					System.out.print("   " + '_');
-				} else if (board.getGameBoard()[line][column] == -1) {
+				} else if (board.getGameBoard()[line][column] == board
+						.getMine()) {
 					System.out.print("   " + '*');
 				} else {
 					System.out
