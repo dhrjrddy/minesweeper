@@ -106,9 +106,9 @@ public class Board {
 
 	/* Initialize every board space to a _ character. */
 	private void initGameBoard() {
-		for (int line = 0; line < gameBoard.length; line++) {
+		for (int row = 0; row < gameBoard.length; row++) {
 			for (int column = 0; column < gameBoard.length; column++) {
-				gameBoard[line][column] = NOT_SELECTED;
+				gameBoard[row][column] = NOT_SELECTED;
 			}
 		}
 	}
@@ -133,23 +133,23 @@ public class Board {
 
 	private void generateMines() {
 		boolean avilable;
-		int line, column;
+		int row, column;
 		for (int mineObject = 0; mineObject < mineCount; mineObject++) {
 			do {
 
 				/* Generates random numbers between 0 and mWidth - 1. */
-				line = (int) (Math.random() * length);
+				row = (int) (Math.random() * length);
 				column = (int) (Math.random() * width);
 
 				/* Make sure we don't place a mine on top of another. */
-				if (gameBoard[line][column] == MINE) {
+				if (gameBoard[row][column] == MINE) {
 					avilable = true;
 				} else {
 					avilable = false;
 				}
 			} while (avilable);
 
-			gameBoard[line][column] = MINE;
+			gameBoard[row][column] = MINE;
 		}
 	}
 }

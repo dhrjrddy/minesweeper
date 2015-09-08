@@ -14,16 +14,13 @@ public class Minesweeper {
 
 	private void showBoard() {
 		System.out.println("Turn " + turn);
-		for (int line = 0; line < board.getLength(); line++) {
+		for (int row = 0; row < board.getLength(); row++) {
 			for (int column = 0; column < board.getWidth(); column++) {
-				if (board.getGameBoard()[line][column] == board
-						.getNotSelected()
-						|| board.getGameBoard()[line][column] == board
-								.getMine()) {
+				if (board.getGameBoard()[row][column] == board.getNotSelected()
+						|| board.getGameBoard()[row][column] == board.getMine()) {
 					System.out.print("   " + '_');
 				} else {
-					System.out
-							.print("   " + board.getGameBoard()[line][column]);
+					System.out.print("   " + board.getGameBoard()[row][column]);
 				}
 			}
 			System.out.println();
@@ -31,14 +28,14 @@ public class Minesweeper {
 	}
 
 	/* Check the user input to make sure no non-existing cell is checked. */
-	private boolean isValidInput(int line, int column) {
-		if (line < 0 || line > (board.getLength() - 1) || column < 0
+	private boolean isValidInput(int row, int column) {
+		if (row < 0 || row > (board.getLength() - 1) || column < 0
 				|| column > (board.getWidth() - 1)) {
 			System.out.println("Choose a number between 1 and "
 					+ board.getLength());
 			return false;
-		} else if (board.getGameBoard()[line][column] != board.getNotSelected()
-				&& board.getGameBoard()[line][column] != board.getMine()) {
+		} else if (board.getGameBoard()[row][column] != board.getNotSelected()
+				&& board.getGameBoard()[row][column] != board.getMine()) {
 			System.out.println("Field already shown");
 			return false;
 		} else
@@ -50,11 +47,11 @@ public class Minesweeper {
 		boolean isMine = false;
 		do {
 			showBoard();
-			int line = 0;
+			int row = 0;
 			int column = 0;
 			try {
 				System.out.print("row: ");
-				line = sc.nextInt() - 1; // As array starts from 0
+				row = sc.nextInt() - 1; // As array starts from 0
 				System.out.print("column: ");
 				column = sc.nextInt() - 1;
 			} catch (InputMismatchException e) {
@@ -62,9 +59,9 @@ public class Minesweeper {
 						+ board.getLength());
 				continue;
 			}
-			if (isValidInput(line, column)) {
+			if (isValidInput(row, column)) {
 				turn++;
-				board.setRow(line);
+				board.setRow(row);
 				board.setColumn(column);
 				isMine = board.hasMine();
 				if (!isMine) {
@@ -72,11 +69,11 @@ public class Minesweeper {
 				}
 			}
 		} while (!isMine && board.getNoOfBlocksLeft() != board.getMineCount());
-		gameOverMessage();
+		gameOverMessageDisplay();
 		sc.close();
 	}
 
-	private void gameOverBoard() {
+	private void gameOverBoardDisplay() {
 		System.out.println("Turn " + turn);
 		for (int line = 0; line < board.getLength(); line++) {
 			for (int column = 0; column < board.getWidth(); column++) {
@@ -95,12 +92,12 @@ public class Minesweeper {
 		}
 	}
 
-	private void gameOverMessage() {
+	private void gameOverMessageDisplay() {
 		if (board.getNoOfBlocksLeft() == board.getMineCount()) {
-			gameOverBoard();
+			gameOverBoardDisplay();
 			System.out.println("Congratulations");
 		} else {
-			gameOverBoard();
+			gameOverBoardDisplay();
 			System.out.println("Mine! You lost!");
 		}
 	}
