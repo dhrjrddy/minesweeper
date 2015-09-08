@@ -16,8 +16,10 @@ public class Minesweeper {
 		System.out.println("Turn " + turn);
 		for (int line = 0; line < board.getLength(); line++) {
 			for (int column = 0; column < board.getWidth(); column++) {
-				if (board.getGameBoard()[line][column] == board.getNotSelected()
-						|| board.getGameBoard()[line][column] == board.getMine()) {
+				if (board.getGameBoard()[line][column] == board
+						.getNotSelected()
+						|| board.getGameBoard()[line][column] == board
+								.getMine()) {
 					System.out.print("   " + '_');
 				} else {
 					System.out
@@ -32,7 +34,8 @@ public class Minesweeper {
 	private boolean isValidInput(int line, int column) {
 		if (line < 0 || line > (board.getLength() - 1) || column < 0
 				|| column > (board.getWidth() - 1)) {
-			System.out.println("Choose a number between 1 and 10");
+			System.out.println("Choose a number between 1 and "
+					+ board.getLength());
 			return false;
 		} else if (board.getGameBoard()[line][column] != board.getNotSelected()
 				&& board.getGameBoard()[line][column] != board.getMine()) {
@@ -55,7 +58,8 @@ public class Minesweeper {
 				System.out.print("column: ");
 				column = sc.nextInt() - 1;
 			} catch (InputMismatchException e) {
-				System.out.println("Choose a number between 1 and 10");
+				System.out.println("Choose a number between 1 and "
+						+ board.getLength());
 				continue;
 			}
 			if (isValidInput(line, column)) {

@@ -48,7 +48,7 @@ public class Board {
 	public int getNotSelected() {
 		return NOT_SELECTED;
 	}
-	
+
 	/*
 	 * For a cell, check mines in all directions and update the cell and return
 	 * the game board with the selected input neighboring fields updated with
