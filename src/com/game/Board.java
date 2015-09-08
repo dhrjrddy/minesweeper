@@ -1,13 +1,13 @@
 package com.game;
 
 public class Board {
-	public int[][] gameBoard; // 2-dimensional array for game
+	private int[][] gameBoard; // 2-dimensional array for game
 	private int row;
 	private int column;
 	private int length; // Length of the board
 	private int width; // Width of the board
 	private int mineCount; // Number of mines
-	public int blocksLeft; // Number of blocks left
+	private int blocksLeft; // Number of blocks left
 	private final int MINE = -1;
 	private final int NOT_SELECTED = 9;
 
